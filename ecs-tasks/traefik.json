@@ -1,0 +1,46 @@
+[
+  {
+    "name": "traefik",
+    "image": "traefik",
+    "command": [
+      "--ecs",
+      "-linfo",
+      "--web.address=:8080",
+      "--ecs.clusters=example",
+      "--entryPoints=Name:http Address::80",
+      "--entryPoints=Name:https Address::443 TLS",
+      "--defaultentrypoints=http,https",
+      "--acme.email=info@${domain}",
+      "--acme.domains=${domain},www.${domain}",
+      "--acme.storage=/acme.json",
+      "--acme.entrypoint=https",
+      "--acme.onhostrule",
+      "--acme.caserver=https://acme-staging.api.letsencrypt.org/directory",
+      "--acme.httpchallenge",
+      "--acme.httpchallenge.entrypoint=http",
+      "--acme.dnschallenge",
+      "--acme.dnschallenge.provider=route53",
+      "--ACME.ACMELogging"
+    ],
+    "essential": true,
+    "memory": 256,
+    "memoryReservation": 128,
+    "dockerLabels": {
+      "traefik.enable": "false"
+    },
+    "portMappings": [
+      {
+        "hostPort": 80,
+        "containerPort": 80
+      },
+      {
+        "hostPort": 443,
+        "containerPort": 443
+      },
+      {
+        "hostPort": 8080,
+        "containerPort": 8080
+      }
+    ]
+  }
+]
